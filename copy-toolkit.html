@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Demo Messaging Fix Toolkit — UpServ</title>
+  <meta name="description" content="Identify whether messaging is the real bottleneck in your SaaS funnel, fix the copy leak first, and measure the lift before wasting time on the wrong layer." />
+
+  <style>
+    :root{
+      --bg:#07090f;
+      --bg2:#0d1320;
+      --bg3:#121826;
+      --text:#f8fafc;
+      --text-strong:rgba(248,250,252,.98);
+      --muted:rgba(226,232,240,.76);
+      --muted-2:rgba(226,232,240,.58);
+      --muted-3:rgba(226,232,240,.40);
+      --line:rgba(148,163,184,.10);
+      --line-strong:rgba(148,163,184,.18);
+      --accent:#ff5ca8;
+      --accent2:#ff84c1;
+
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:18px;
+      --radius-sm:14px;
+
+      --max:1140px;
+      --max-wide:1260px;
+      --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",sans-serif;
+
+      --shadow-soft:0 8px 16px rgba(0,0,0,.09);
+      --shadow-card:0 12px 26px rgba(0,0,0,.13);
+      --shadow-major:0 24px 58px rgba(0,0,0,.22);
+      --shadow-accent:0 12px 24px rgba(255,92,168,.12);
+
+      --section-space:88px;
+      --section-space-tight:60px;
+      --hero-gap:46px;
+      --text-max:70ch;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(820px 360px at 50% -18%, rgba(255,92,168,.05), transparent 58%),
+        linear-gradient(180deg, #05070d 0%, var(--bg) 100%);
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    h1,h2,h3,p,ul{margin:0}
+
+    .wrap{max-width:var(--max-wide);margin:0 auto;padding:0 24px 104px}
+    .container{width:min(var(--max-wide),100%);margin:0 auto}
+    .content{width:min(var(--max),100%);margin:0 auto}
+
+    .band{
+      position:relative;
+      padding:var(--section-space) 0;
+      scroll-margin-top:88px;
+    }
+    .band-tight{padding:var(--section-space-tight) 0}
+    .band-divider::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:50%;
+      width:min(100%,var(--max));
+      height:1px;
+      transform:translateX(-50%);
+      background:linear-gradient(90deg, transparent, rgba(148,163,184,.08), transparent);
+      pointer-events:none;
+    }
+
+    .stack-10 > * + *{margin-top:10px}
+    .stack-12 > * + *{margin-top:12px}
+    .stack-14 > * + *{margin-top:14px}
+    .stack-16 > * + *{margin-top:16px}
+    .stack-18 > * + *{margin-top:18px}
+    .stack-20 > * + *{margin-top:20px}
+    .stack-24 > * + *{margin-top:24px}
+    .stack-28 > * + *{margin-top:28px}
+    .stack-32 > * + *{margin-top:32px}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:40;
+      backdrop-filter:blur(14px);
+      background:rgba(7,9,15,.68);
+      border-bottom:1px solid rgba(148,163,184,.06);
+    }
+    .topbar-inner{
+      max-width:var(--max-wide);
+      margin:0 auto;
+      padding:14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      white-space:nowrap;
+    }
+    .brandMark{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 3px rgba(255,92,168,.06);
+      flex:0 0 auto;
+    }
+    .brandText{
+      font-size:.78rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(226,232,240,.76);
+    }
+
+    .btns,.ctaRow{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:12px 18px;
+      border:1px solid var(--line);
+      background:rgba(18,25,39,.44);
+      color:var(--text);
+      font-size:.94rem;
+      font-weight:660;
+      line-height:1;
+      min-height:48px;
+      transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform:translateY(-1px);
+      border-color:var(--line-strong);
+    }
+    .btn-primary{
+      color:#160b12;
+      border-color:transparent;
+      background:linear-gradient(180deg, var(--accent2) 0%, var(--accent) 100%);
+      box-shadow:var(--shadow-accent);
+    }
+    .btn-primary:hover{
+      box-shadow:0 14px 28px rgba(255,92,168,.16);
+    }
+    .btn-secondary{
+      background:rgba(18,25,39,.24);
+      color:rgba(248,250,252,.92);
+    }
+    .btn-ghost{background:transparent}
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-size:.71rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(226,232,240,.54);
+      font-weight:700;
+    }
+    .eyebrow::after{
+      content:"";
+      width:40px;
+      height:1px;
+      background:linear-gradient(90deg, rgba(255,92,168,.20), transparent);
+    }
+    .eyebrow-soft{color:rgba(226,232,240,.46)}
+    .eyebrow-soft::after{
+      width:24px;
+      background:linear-gradient(90deg, rgba(148,163,184,.16), transparent);
+    }
+    .eyebrow-accent{color:rgba(255,204,228,.66)}
+    .eyebrow-accent::after{
+      width:52px;
+      background:linear-gradient(90deg, rgba(255,92,168,.24), transparent);
+    }
+
+    h1{
+      font-size:clamp(3rem, 5.35vw, 5.15rem);
+      line-height:.91;
+      letter-spacing:-.072em;
+      max-width:11.4ch;
+      color:var(--text-strong);
+    }
+    .heroAccent{color:var(--accent)}
+
+    h2{
+      font-size:clamp(2rem, 3vw, 2.75rem);
+      line-height:1.01;
+      letter-spacing:-.056em;
+      color:var(--text-strong);
+    }
+    h3{
+      font-size:1.08rem;
+      line-height:1.2;
+      letter-spacing:-.022em;
+      color:rgba(248,250,252,.95);
+    }
+
+    .intro{
+      color:rgba(248,250,252,.90);
+      font-size:1.02rem;
+      line-height:1.72;
+      max-width:58ch;
+    }
+    .bodyText{
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.68;
+      max-width:var(--text-max);
+    }
+    .noteText{
+      color:var(--muted-2);
+      font-size:.94rem;
+      line-height:1.6;
+    }
+    .microText{
+      color:var(--muted-3);
+      font-size:.86rem;
+      line-height:1.52;
+    }
+    .why{
+      color:rgba(248,250,252,.90);
+      font-size:1rem;
+      line-height:1.64;
+    }
+
+    .hero{
+      min-height:calc(100vh - 132px);
+      display:grid;
+      place-items:center;
+      padding:34px 0 0;
+    }
+    .heroLayout{
+      width:100%;
+      display:grid;
+      gap:var(--hero-gap);
+      align-items:center;
+      grid-template-columns:minmax(0,1.08fr) minmax(400px,.92fr);
+    }
+    .heroInner{
+      max-width:710px;
+      padding-top:2px;
+    }
+    .heroLead{max-width:620px}
+    .heroActions{margin-top:22px}
+    .heroTrust{margin-top:14px}
+    .heroFlow{margin-top:16px}
+
+    .microTrust{
+      color:var(--muted-2);
+      font-size:.9rem;
+      line-height:1.52;
+    }
+    .trustPill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,92,168,.08);
+      background:rgba(255,92,168,.03);
+    }
+    .trustDot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:var(--accent);
+      box-shadow:0 0 0 3px rgba(255,92,168,.05);
+      flex:0 0 auto;
+    }
+
+    .heroFlowBar{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+      padding:6px 8px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.04);
+      background:transparent;
+    }
+    .heroFlowItem{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      padding:7px 9px;
+      border-radius:12px;
+      background:rgba(255,255,255,.006);
+      min-width:0;
+    }
+    .heroFlowIndex{
+      width:24px;
+      height:24px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,92,168,.08);
+      background:rgba(255,92,168,.04);
+      color:rgba(255,220,235,.74);
+      font-size:.75rem;
+      font-weight:700;
+      flex:0 0 auto;
+    }
+    .heroFlowText{min-width:0}
+    .heroFlowText strong{
+      display:block;
+      font-size:.82rem;
+      line-height:1.18;
+      color:rgba(248,250,252,.86);
+      font-weight:620;
+    }
+    .heroFlowText span{
+      display:block;
+      color:var(--muted-3);
+      font-size:.75rem;
+      line-height:1.26;
+      margin-top:2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .grid2,.cards,.previewGrid,.wireGrid,.pricing{
+      display:grid;
+      gap:20px;
+    }
+    .grid2,.cards,.wireGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .previewGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .pricing{
+      grid-template-columns:minmax(0,1fr) minmax(400px,.92fr);
+      align-items:start;
+      gap:38px;
+    }
+
+    .surface-major,
+    .surface-support,
+    .surface-minor,
+    .surface-ghost{
+      position:relative;
+      border-radius:var(--radius-xl);
+      overflow:hidden;
+      transition:border-color .18s ease,background .18s ease,box-shadow .18s ease;
+    }
+    .surface-major{
+      border:1px solid rgba(255,92,168,.11);
+      background:linear-gradient(180deg, rgba(21,27,39,.90), rgba(11,16,26,.95));
+      box-shadow:var(--shadow-major);
+    }
+    .surface-support{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(18,25,39,.66), rgba(12,17,27,.74));
+      box-shadow:var(--shadow-card);
+    }
+    .surface-minor{
+      border:1px solid rgba(148,163,184,.05);
+      background:linear-gradient(180deg, rgba(255,255,255,.012), rgba(255,255,255,.004));
+      box-shadow:var(--shadow-soft);
+    }
+    .surface-ghost{
+      border:1px solid rgba(148,163,184,.04);
+      background:transparent;
+      box-shadow:none;
+    }
+
+    .surface-pad-xl{padding:32px}
+    .surface-pad-lg{padding:28px}
+    .surface-pad-md{padding:22px}
+    .surface-pad-sm{padding:18px}
+
+    .cardTop,.wireTop,.frameTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .tag,.pill{
+      font-size:.68rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(226,232,240,.54);
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.08);
+      background:rgba(255,255,255,.008);
+      white-space:nowrap;
+    }
+    .pill-accent{
+      border-color:rgba(255,92,168,.10);
+      background:rgba(255,92,168,.022);
+      color:rgba(255,218,234,.72);
+    }
+
+    .bullets,.checklist{
+      margin:12px 0 0;
+      padding-left:18px;
+      color:rgba(226,232,240,.84);
+      line-height:1.68;
+    }
+    .bullets li,.checklist li{margin:0 0 8px}
+
+    .sectionBlock{display:block}
+    .sectionGrid{margin-top:24px}
+    .sectionTail{margin-top:18px}
+
+    .productFrame{
+      padding:18px;
+      isolation:isolate;
+      transform:scale(1.02);
+    }
+    .productFrame::before{
+      content:"";
+      position:absolute;
+      inset:auto -16% -24% auto;
+      width:180px;
+      height:180px;
+      background:radial-gradient(circle, rgba(255,92,168,.05), transparent 66%);
+      pointer-events:none;
+      filter:blur(6px);
+      z-index:0;
+    }
+    .productFrame::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.01), transparent 14%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .productFrame > *{position:relative;z-index:1}
+    .frameTitle{
+      font-size:.72rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(226,232,240,.46);
+    }
+    .dots{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .dot,.dot.p,.dot.p2{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:rgba(226,232,240,.12);
+    }
+    .dot.p{background:rgba(255,92,168,.38)}
+    .dot.p2{background:rgba(255,130,191,.16)}
+
+    .heroMock{
+      margin-top:16px;
+      display:grid;
+      gap:12px;
+    }
+    .pageShot{
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,.06);
+      background:rgba(255,255,255,.01);
+      padding:14px;
+      display:grid;
+      gap:10px;
+    }
+    .shotHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .chipRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .miniChip{
+      height:22px;
+      padding:0 9px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.06);
+      background:rgba(255,255,255,.008);
+      color:rgba(226,232,240,.46);
+      font-size:.65rem;
+      display:inline-flex;
+      align-items:center;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+    }
+    .signal{
+      border-radius:14px;
+      border:1px solid rgba(255,92,168,.08);
+      background:rgba(255,92,168,.02);
+      padding:12px;
+      display:grid;
+      gap:8px;
+    }
+    .signalMeta{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      font-size:.7rem;
+      color:rgba(226,232,240,.52);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+    }
+    .signalRow,
+    .previewRow,
+    .evidenceRow{
+      height:10px;
+      border-radius:999px;
+      background:rgba(148,163,184,.13);
+    }
+    .signalRow.s,.previewRow.s{width:58%}
+    .signalRow.m,.previewRow.m{width:78%}
+    .signalRow.l,.previewRow.l{width:92%}
+
+    .proofStack{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1.14fr .86fr;
+    }
+    .proofCard,.decisionCard{
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,.06);
+      background:rgba(255,255,255,.008);
+      padding:11px;
+      display:grid;
+      gap:8px;
+    }
+    .accentLine{
+      height:32px;
+      border-radius:11px;
+      background:rgba(255,92,168,.05);
+      border:1px solid rgba(255,92,168,.08);
+    }
+    .ghostLine{
+      height:32px;
+      border-radius:11px;
+      background:rgba(148,163,184,.04);
+      border:1px solid rgba(148,163,184,.06);
+    }
+    .evidencePill{
+      height:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.025);
+      border:1px solid rgba(148,163,184,.06);
+    }
+    .evidencePill.early{
+      background:rgba(255,92,168,.035);
+      border-color:rgba(255,92,168,.07);
+    }
+
+    .wireNote,.cardDesc,.sampleDesc{margin-top:14px}
+
+    details{
+      margin-top:16px;
+      border:1px solid rgba(148,163,184,.08);
+      background:rgba(255,255,255,.012);
+      border-radius:16px;
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding:12px 14px;
+      color:rgba(248,250,252,.90);
+      font-weight:640;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    summary::-webkit-details-marker{display:none}
+    .sumIco{
+      width:26px;
+      height:26px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.012);
+      position:relative;
+      flex:0 0 auto;
+    }
+    .sumIco::before,.sumIco::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:12px;
+      height:2px;
+      border-radius:999px;
+      background:rgba(226,232,240,.64);
+      transform:translate(-50%,-50%);
+    }
+    .sumIco::after{transform:translate(-50%,-50%) rotate(90deg)}
+    details[open] .sumIco::after{opacity:0}
+    .detailBody{
+      padding:0 14px 14px;
+      color:var(--muted);
+      line-height:1.66;
+      font-size:.95rem;
+    }
+    .detailBody ul{margin:10px 0 0;padding-left:18px}
+    .detailBody li{margin:0 0 8px}
+
+    .formatLine{
+      margin-top:22px;
+      padding:18px 20px;
+      border-radius:20px;
+      border:1px solid rgba(255,92,168,.08);
+      background:rgba(255,92,168,.022);
+      color:rgba(248,250,252,.92);
+      line-height:1.62;
+      max-width:740px;
+    }
+
+    .mini{
+      margin-top:14px;
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,.07);
+      background:rgba(255,255,255,.01);
+      padding:12px;
+      display:grid;
+      gap:8px;
+    }
+    .sampleSheet{display:grid;gap:8px}
+    .sampleHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .sampleTitle{
+      color:rgba(248,250,252,.86);
+      font-size:.8rem;
+      font-weight:640;
+      letter-spacing:-.01em;
+    }
+    .sampleMeta{display:grid;gap:7px}
+    .sampleBlock{
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.06);
+      background:rgba(255,255,255,.008);
+      padding:10px;
+      display:grid;
+      gap:7px;
+    }
+    .sampleGrid{
+      display:grid;
+      gap:7px;
+      grid-template-columns:1fr 1fr;
+    }
+
+    .wireCanvas{
+      margin-top:14px;
+      border-radius:16px;
+      border:1px solid rgba(148,163,184,.07);
+      background:rgba(255,255,255,.01);
+      padding:14px;
+      display:grid;
+      gap:10px;
+    }
+    .ctaRow2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .pricingInfo{
+      padding:10px 2px 10px 0;
+      max-width:600px;
+    }
+    .pricebox{
+      padding:32px;
+      position:relative;
+      overflow:hidden;
+    }
+    .pricebox::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(255,92,168,.18), transparent);
+    }
+    .pricebox::after{
+      content:"";
+      position:absolute;
+      top:-30px;
+      right:-24px;
+      width:90px;
+      height:90px;
+      background:radial-gradient(circle, rgba(255,92,168,.035), transparent 70%);
+      filter:blur(6px);
+      pointer-events:none;
+    }
+    .priceLabel{margin-bottom:10px}
+    .price{
+      font-size:3.9rem;
+      font-weight:830;
+      line-height:.90;
+      letter-spacing:-.075em;
+      margin:8px 0 12px;
+      color:var(--text-strong);
+    }
+    .decisionMeta{
+      display:grid;
+      gap:16px;
+      margin-top:18px;
+    }
+    .decisionMeta .btn-primary{
+      width:100%;
+      min-height:54px;
+      font-size:.98rem;
+      font-weight:700;
+    }
+    .pricingAside{display:grid;gap:16px}
+    .pricingNote{
+      padding:18px 20px;
+      border-radius:18px;
+      border:1px solid rgba(148,163,184,.07);
+      background:rgba(255,255,255,.008);
+    }
+
+    .faq{
+      display:grid;
+      gap:14px;
+      margin-top:20px;
+      max-width:900px;
+    }
+    .faqItem{
+      overflow:hidden;
+      border-radius:var(--radius-lg);
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(18,25,39,.66), rgba(12,17,27,.72));
+      box-shadow:var(--shadow-soft);
+    }
+    .faqItem.open{
+      border-color:rgba(255,92,168,.10);
+      background:linear-gradient(180deg, rgba(21,27,41,.74), rgba(12,17,27,.78));
+    }
+    .faqQ{
+      width:100%;
+      border:0;
+      background:transparent;
+      color:var(--text);
+      padding:16px 18px;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      cursor:pointer;
+    }
+    .faqQ .q{
+      font-size:1rem;
+      line-height:1.36;
+      letter-spacing:-.01em;
+    }
+    .ico{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.012);
+      position:relative;
+      flex:0 0 auto;
+    }
+    .ico::before,.ico::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:12px;
+      height:2px;
+      border-radius:999px;
+      background:rgba(226,232,240,.70);
+      transform:translate(-50%,-50%);
+      transition:opacity .18s ease, transform .18s ease;
+    }
+    .ico::after{transform:translate(-50%,-50%) rotate(90deg)}
+    .faqItem.open .ico::after{opacity:0}
+    .faqA{
+      display:grid;
+      grid-template-rows:0fr;
+      transition:grid-template-rows .22s ease;
+    }
+    .faqItem.open .faqA{grid-template-rows:1fr}
+    .faqInner{
+      min-height:0;
+      overflow:hidden;
+      padding:0 18px;
+      color:var(--muted);
+      line-height:1.66;
+      font-size:.97rem;
+    }
+    .faqItem.open .faqInner{padding:0 18px 18px}
+
+    .closingBand{
+      padding-top:98px;
+      padding-bottom:66px;
+    }
+    .closingPanel{
+      padding:42px 34px;
+      text-align:center;
+      border:1px solid rgba(255,92,168,.09);
+      background:linear-gradient(180deg, rgba(20,26,38,.90), rgba(10,14,22,.96));
+      box-shadow:0 18px 42px rgba(0,0,0,.20);
+    }
+    .closingPanel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.01), transparent 18%);
+      pointer-events:none;
+    }
+    .closingInner{
+      position:relative;
+      z-index:1;
+      max-width:800px;
+      margin:0 auto;
+    }
+    .closingHeading{
+      max-width:16.8ch;
+      margin:0 auto 16px;
+      font-size:clamp(2.2rem, 3.6vw, 3.3rem);
+      line-height:.97;
+      letter-spacing:-.058em;
+    }
+    .closingText{
+      max-width:54ch;
+      margin:0 auto 22px;
+      font-size:1rem;
+    }
+
+    footer{
+      border-top:1px solid rgba(148,163,184,.08);
+      padding:24px 0 30px;
+      color:var(--muted-2);
+      font-size:.84rem;
+    }
+    .footerInner{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .footerLinks{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+    }
+
+    @media (max-width:1120px){
+      .heroLayout,.pricing{grid-template-columns:1fr}
+      .heroInner{max-width:none}
+      .pricingInfo{padding-right:0;max-width:none}
+      h1{max-width:none}
+      .productFrame{transform:none}
+    }
+
+    @media (max-width:860px){
+      :root{
+        --section-space:66px;
+        --section-space-tight:54px;
+        --hero-gap:28px;
+      }
+      .wrap,.topbar-inner{padding-left:18px;padding-right:18px}
+      .grid2,.cards,.previewGrid,.wireGrid,.ctaRow2,.sampleGrid,.heroFlowBar{grid-template-columns:1fr}
+      .btns,.ctaRow{width:100%}
+      .btns .btn,.ctaRow .btn{width:100%}
+      .surface-pad-xl,.surface-pad-lg,.surface-pad-md,.surface-pad-sm,.pricebox,.closingPanel{padding:20px}
+      .hero{min-height:auto;padding-top:28px}
+      .heroFlowItem{padding:9px 11px}
+      .price{font-size:2.95rem}
+      .proofStack{grid-template-columns:1fr}
+      .closingBand{padding-top:76px}
+    }
+    .pricebox .why{
+  max-width: 30ch;
+}
+
+.closingHeading{
+  max-width: 14ch;
+}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" aria-label="UpServ Toolkit">
+        <span class="brandMark" aria-hidden="true"></span>
+        <span class="brandText">UPSERV • DEMO MESSAGING FIX</span>
+      </div>
+      <div class="btns">
+        <a class="btn btn-ghost" href="#pricing">Get the Copy Leak Fix Toolkit</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="band band-tight" aria-label="Hero" id="heroBand">
+      <div class="container">
+        <div class="hero">
+          <div class="heroLayout">
+            <div class="heroInner">
+              <div class="heroLead stack-18">
+                <p class="eyebrow eyebrow-accent">Copy Leak Fix Toolkit</p>
+
+<h1>
+  Your funnel isn’t broken where you think it is.<br/>
+  <span class="heroAccent">Fix the messaging layer before you waste another cycle on the wrong problem.</span>
+</h1>
+
+<div class="stack-12">
+  <p class="intro">
+    Most SaaS teams measure conversion drops correctly but diagnose them wrong.
+  </p>
+
+  <p class="bodyText">
+    When demos stay low, they redesign pages, push more spend, or blame sales. This toolkit helps you isolate whether messaging is the real bottleneck, fix it first, and measure the lift before touching the rest of the funnel.
+  </p>
+</div>
+
+<div class="ctaRow heroActions">
+  <a class="btn btn-primary" href="#pricing">Get the Copy Leak Fix Toolkit</a>
+  <a class="btn btn-secondary" href="#preview">Preview the toolkit</a>
+</div>
+
+<p class="microTrust heroTrust">
+  <span class="trustPill">
+    <span class="trustDot"></span>
+    Immediate download • First leak identified in ~20 minutes • First pass applied in 1–2 hours
+  </span>
+</p>
+              </div>
+            </div>
+
+            <div class="surface-major productFrame" aria-label="Product preview frame">
+              <div class="frameTop">
+                <div class="dots" aria-hidden="true">
+                  <span class="dot p"></span><span class="dot p2"></span><span class="dot"></span>
+                </div>
+                <div class="frameTitle">Sample Toolkit Pages</div>
+              </div>
+
+              <div class="heroMock" aria-hidden="true">
+                <div class="pageShot">
+                  <div class="shotHeader">
+                    <div class="chipRow">
+                      <span class="miniChip">Audit Sheet</span>
+                      <span class="miniChip">Priority Leak</span>
+                    </div>
+                    <span class="miniChip">Page 01</span>
+                  </div>
+
+                  <div class="signal">
+                    <div class="signalMeta">
+                      <span>Primary Promise</span>
+                      <span>Needs clarity</span>
+                    </div>
+                    <div class="signalRow l"></div>
+                    <div class="signalRow m"></div>
+                    <div class="accentLine"></div>
+                  </div>
+
+                  <div class="proofStack">
+                    <div class="proofCard">
+                      <div class="miniChip">Proof Order</div>
+                      <div class="evidencePill early"></div>
+                      <div class="evidencePill"></div>
+                    </div>
+                    <div class="decisionCard">
+                      <div class="miniChip">CTA</div>
+                      <div class="ghostLine"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pageShot">
+                  <div class="shotHeader">
+                    <div class="chipRow">
+                      <span class="miniChip">Checklist</span>
+                      <span class="miniChip">Pass / Fail</span>
+                    </div>
+                    <span class="miniChip">Page 02</span>
+                  </div>
+                  <div class="signalRow l"></div>
+                  <div class="signalRow m"></div>
+                  <div class="evidencePill early"></div>
+                  <div class="evidencePill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="heroFlow content" aria-label="3 step flow">
+  <div class="heroFlowBar">
+    <div class="heroFlowItem">
+      <div class="heroFlowIndex">1</div>
+      <div class="heroFlowText">
+        <strong>Diagnose</strong>
+        <span>Find the copy leak</span>
+      </div>
+    </div>
+    <div class="heroFlowItem">
+      <div class="heroFlowIndex">2</div>
+      <div class="heroFlowText">
+        <strong>Fix</strong>
+        <span>Apply the right rewrite</span>
+      </div>
+    </div>
+    <div class="heroFlowItem">
+      <div class="heroFlowIndex">3</div>
+      <div class="heroFlowText">
+        <strong>Measure</strong>
+        <span>Track lift over 7–14 days</span>
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-divider" id="why" aria-label="Why this exists">
+  <div class="content">
+    <div class="sectionBlock stack-18">
+      <p class="eyebrow eyebrow-soft">Why This Exists</p>
+
+      <p class="bodyText">
+        Most SaaS teams don’t have a traffic problem first. They have an interpretation problem.
+        Demos stay low, so they change the visible layer: more spend, more redesign, more pressure on sales.
+        But if the message is unclear, none of that fixes the bottleneck.
+      </p>
+
+      <div class="grid2 sectionGrid">
+        <div class="surface-support surface-pad-md stack-12">
+          <p class="eyebrow eyebrow-soft">What teams usually do</p>
+          <ul class="bullets">
+            <li>Increase ad spend</li>
+            <li>Redesign the page</li>
+            <li>Push sales harder</li>
+            <li>Question traffic quality</li>
+          </ul>
+        </div>
+
+        <div class="surface-major surface-pad-md stack-12">
+          <p class="eyebrow eyebrow-soft">What that quietly costs</p>
+          <ul class="bullets">
+            <li>Another cycle spent fixing the wrong layer</li>
+            <li>Qualified visitors leaving without commitment</li>
+            <li>Distorted CAC and pipeline signals</li>
+            <li>More internal debate, no real movement</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="noteText sectionTail">
+        This toolkit exists to stop that loop and show whether messaging is the constraint before you touch anything else.
+      </p>
+    </div>
+  </div>
+</section>
+
+    <section class="band band-divider band-tight" id="beforeafter" aria-label="Before After">
+      <div class="content">
+        <div class="sectionBlock stack-18">
+          <p class="eyebrow">What Misdiagnosis Looks Like</p>
+
+          <div class="wireGrid sectionGrid">
+            <div class="surface-support surface-pad-md" aria-label="Before mock">
+              <div class="wireTop">
+                <span class="pill">Before</span>
+                <span class="pill">Scattered decisions</span>
+              </div>
+              <div class="wireCanvas">
+                <div class="previewRow m"></div>
+                <div class="previewRow s"></div>
+                <div class="ctaRow2">
+                  <div class="accentLine"></div>
+                  <div class="ghostLine"></div>
+                </div>
+                <div class="evidencePill"></div>
+                <div class="evidencePill"></div>
+              </div>
+              <div class="noteText wireNote">
+                Traffic arrives. The page still fails to create enough clarity, trust, or intent to earn the demo click.
+              </div>
+            </div>
+
+            <div class="surface-major surface-pad-md" aria-label="After mock">
+              <div class="wireTop">
+                <span class="pill pill-accent">After</span>
+                <span class="pill">Ordered decisions</span>
+              </div>
+              <div class="wireCanvas">
+                <div class="previewRow l"></div>
+                <div class="previewRow m"></div>
+                <div class="accentLine"></div>
+                <div class="evidencePill early"></div>
+              </div>
+              <div class="noteText wireNote">
+                One clear promise. One conversion path. Proof placed before the ask. The page earns commitment instead of assuming it.
+              </div>
+            </div>
+          </div>
+
+          <p class="noteText sectionTail">
+            Most weak pages do not need more content. They need the right message, in the right order, with the right ask.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-divider" id="what" aria-label="What this is">
+  <div class="content">
+    <div class="sectionBlock stack-18">
+      <p class="eyebrow eyebrow-soft">What This Toolkit Is</p>
+
+      <div class="grid2 sectionGrid">
+        <div class="surface-major surface-pad-md">
+          <h3>This is</h3>
+          <ul class="checklist">
+            <li>A copy leak diagnosis system for demo-led SaaS funnels</li>
+            <li>A rewrite system for fixing vague heroes, weak proof, bad CTA alignment, and message friction</li>
+            <li>A page-structure guide for homepage, pricing, and demo/signup flow</li>
+            <li>A measurement system for validating whether the fix worked</li>
+          </ul>
+        </div>
+
+        <div class="surface-minor surface-pad-md stack-10">
+          <h3>This is not</h3>
+          <ul class="checklist">
+            <li>Not generic copywriting advice</li>
+            <li>Not AI-generated filler</li>
+            <li>Not brand voice exploration</li>
+            <li>Not done-for-you copy</li>
+            <li>Not for teams still guessing their ICP</li>
+          </ul>
+          <p class="noteText">You are buying diagnostic clarity first, then the frameworks to act on it.</p>
+        </div>
+      </div>
+
+      <p class="bodyText sectionTail">
+        This is built to help one team answer one important question correctly: is messaging the layer that is actually holding conversion down?
+      </p>
+    </div>
+  </div>
+</section>
+
+    <section class="band band-divider band-tight" id="audience" aria-label="Intended audience">
+  <div class="content">
+    <div class="sectionBlock stack-18">
+      <p class="eyebrow eyebrow-soft">Who This Is For</p>
+
+      <div class="grid2 sectionGrid">
+        <div class="surface-support surface-pad-md">
+          <h3>Best fit</h3>
+          <ul class="checklist">
+            <li>B2B SaaS founders, PMMs, growth leads, CROs, and revenue teams</li>
+            <li>Teams already getting traffic but not enough demos</li>
+            <li>Funnels where homepage, pricing, or demo-page messaging feels “mostly right” but underperforms</li>
+            <li>Teams that want a structured internal fix before paying for a redesign or agency engagement</li>
+          </ul>
+        </div>
+
+        <div class="surface-ghost surface-pad-md">
+          <h3>Not a fit</h3>
+          <ul class="checklist">
+            <li>Pre-PMF teams with no stable ICP yet</li>
+            <li>Founders with no meaningful traffic or demo volume</li>
+            <li>Anyone looking for done-for-you copy</li>
+            <li>Anyone hoping a template will solve a product problem</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="noteText sectionTail">
+        This is strongest when traffic already exists and you need to know whether the message is the bottleneck before changing the rest.
+      </p>
+    </div>
+  </div>
+</section>
+
+    <section class="band band-divider" id="deliverables" aria-label="Deliverables">
+  <div class="content">
+    <div class="sectionBlock stack-20">
+      <p class="eyebrow">What You Get</p>
+
+      <div class="cards sectionGrid">
+        <div class="surface-major surface-pad-md">
+          <div class="cardTop">
+            <div>
+              <h3>1. Copy Leak Brief</h3>
+              <p class="noteText cardDesc">
+                A fast orientation so you know exactly where to start, what to ignore, and how to use the toolkit in the right order.
+              </p>
+            </div>
+            <span class="tag">Orientation</span>
+          </div>
+          <details>
+            <summary>Details <span class="sumIco" aria-hidden="true"></span></summary>
+            <div class="detailBody">
+              <ul>
+                <li><b>Use it to:</b> get into the system fast</li>
+                <li><b>Decide:</b> where the bottleneck likely sits</li>
+                <li><b>Outcome:</b> no wasted time reading the wrong parts first</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <div class="surface-support surface-pad-md">
+          <div class="cardTop">
+            <div>
+              <h3>2. Copy Leak Diagnostic</h3>
+              <p class="noteText cardDesc">
+                Audit your homepage, pricing page, and demo/signup page for clarity leaks, trust leaks, and value leaks.
+              </p>
+            </div>
+            <span class="tag">Diagnosis</span>
+          </div>
+          <details>
+            <summary>Details <span class="sumIco" aria-hidden="true"></span></summary>
+            <div class="detailBody">
+              <ul>
+                <li><b>Use it to:</b> identify where messaging breaks</li>
+                <li><b>Covers:</b> hero clarity, proof placement, CTA friction, pricing clarity, page logic</li>
+                <li><b>Outcome:</b> isolate the leak before changing anything else</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <div class="surface-support surface-pad-md">
+          <div class="cardTop">
+            <div>
+              <h3>3. Message Repair System</h3>
+              <p class="noteText cardDesc">
+                Plug-and-play rewrite patterns for hero, outcome, proof, objection handling, CTA, pricing, demo flow, and narrative.
+              </p>
+            </div>
+            <span class="tag">Fix</span>
+          </div>
+          <details>
+            <summary>Details <span class="sumIco" aria-hidden="true"></span></summary>
+            <div class="detailBody">
+              <ul>
+                <li><b>Use it to:</b> rewrite the exact layer that is leaking</li>
+                <li><b>Includes:</b> frameworks, before/after models, SaaS examples, CTA patterns</li>
+                <li><b>Outcome:</b> stronger messaging without guessing what to write</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <div class="surface-minor surface-pad-md">
+          <div class="cardTop">
+            <div>
+              <h3>4. Conversion Flow Architecture</h3>
+              <p class="noteText cardDesc">
+                Fix the sequence of your homepage, pricing page, and demo/signup page so the message lands in the right order.
+              </p>
+            </div>
+            <span class="tag">Structure</span>
+          </div>
+          <details>
+            <summary>Details <span class="sumIco" aria-hidden="true"></span></summary>
+            <div class="detailBody">
+              <ul>
+                <li><b>Use it to:</b> reorder the page after rewrites are made</li>
+                <li><b>Covers:</b> proof timing, objection timing, CTA placement, page flow</li>
+                <li><b>Outcome:</b> cleaner commitment path from visitor to demo</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <div class="surface-ghost surface-pad-md" style="grid-column:1/-1;">
+          <div class="cardTop">
+            <div>
+              <h3>5. Conversion Impact Tracker</h3>
+              <p class="noteText cardDesc">
+                Log fixes, compare before vs after, measure impact over 48 hours, 7 days, and 14 days, and decide whether to keep, iterate, or roll back.
+              </p>
+            </div>
+            <span class="tag">Measure</span>
+          </div>
+          <details>
+            <summary>Details <span class="sumIco" aria-hidden="true"></span></summary>
+            <div class="detailBody">
+              <ul>
+                <li><b>Use it to:</b> validate whether the change improved conversion</li>
+                <li><b>Tracks:</b> clarity lift, trust lift, conversion lift, rollback decisions</li>
+                <li><b>Outcome:</b> no more “we think it helped” decisions</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="formatLine">
+        <b>Time-to-value</b><br/>
+        Diagnose the leak in ~20 minutes. Apply the first meaningful fix in 1–2 hours. Measure the lift over the next 7–14 days.
+      </div>
+    </div>
+  </div>
+</section>
+
+    <section class="band band-divider band-tight" id="preview" aria-label="Preview">
+      <div class="content">
+        <div class="sectionBlock stack-20">
+          <p class="eyebrow eyebrow-soft">Inside the Toolkit</p>
+          <p class="bodyText" style="max-width:60ch;">
+  This is not a swipe file. It is a working system. Each asset handles one job: diagnose the leak, apply the right fix, sequence the page correctly, and measure the result.
+</p>
+
+          <div class="previewGrid sectionGrid">
+            <div class="surface-support surface-pad-md">
+              <h3>Pre-Demo Confidence Checklist (sample)</h3>
+              <div class="mini" aria-hidden="true">
+                <div class="sampleSheet">
+                  <div class="sampleHeader">
+                    <span class="sampleTitle">Confidence Scan</span>
+                    <span class="miniChip">Checklist View</span>
+                  </div>
+                  <div class="sampleMeta">
+                    <div class="sampleBlock">
+                      <div class="previewRow l"></div>
+                      <div class="previewRow m"></div>
+                    </div>
+                    <div class="sampleGrid">
+                      <div class="sampleBlock">
+                        <div class="evidencePill early"></div>
+                      </div>
+                      <div class="sampleBlock">
+                        <div class="evidencePill"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="noteText sampleDesc">A fast scan for whether the page has actually earned the demo ask.</p>
+            </div>
+
+            <div class="surface-ghost surface-pad-md" style="grid-column:1/-1;">
+              <p class="eyebrow eyebrow-soft">What this looks like in practice</p>
+
+              <div class="bodyText" style="max-width:60ch;">
+                <p>Example output from a single pass:</p>
+                <ul class="bullets">
+                  <li><b>Constraint:</b> Primary promise unclear for ICP → visitors cannot confirm relevance fast enough</li>
+                  <li><b>Impact:</b> Qualified traffic hesitates before demo commitment</li>
+                  <li><b>First Fix:</b> Rewrite hero to reflect specific ICP outcome and move proof above first CTA</li>
+                  <li><b>Do Not Touch:</b> Pricing, traffic source, and product positioning</li>
+                </ul>
+              </div>
+
+              <p class="noteText" style="margin-top:12px;">
+                The goal is not to rewrite everything. It is to make the next decision correct.
+              </p>
+
+              <p class="microText" style="margin-top:10px;">
+                This is the level of clarity the system is designed to produce on the first pass.
+              </p>
+            </div>
+
+            <div class="surface-major surface-pad-md">
+              <h3>Homepage Message Architecture (sample)</h3>
+              <div class="mini" aria-hidden="true">
+                <div class="sampleSheet">
+                  <div class="sampleHeader">
+                    <span class="sampleTitle">Decision Map</span>
+                    <span class="miniChip">Framework View</span>
+                  </div>
+                  <div class="sampleBlock">
+                    <div class="previewRow l"></div>
+                    <div class="accentLine"></div>
+                  </div>
+                  <div class="sampleGrid">
+                    <div class="sampleBlock">
+                      <div class="evidencePill early"></div>
+                    </div>
+                    <div class="sampleBlock">
+                      <div class="ghostLine"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="noteText sampleDesc">A page-level structure for promise, proof order, and CTA discipline.</p>
+            </div>
+
+            <div class="surface-minor surface-pad-md">
+              <h3>Proof &amp; Objection Placement Guide (sample)</h3>
+              <div class="mini" aria-hidden="true">
+                <div class="sampleSheet">
+                  <div class="sampleHeader">
+                    <span class="sampleTitle">Evidence Order</span>
+                    <span class="miniChip">Diagnostic View</span>
+                  </div>
+                  <div class="sampleBlock">
+                    <div class="evidencePill early"></div>
+                    <div class="evidencePill"></div>
+                  </div>
+                  <div class="sampleBlock">
+                    <div class="previewRow s"></div>
+                  </div>
+                </div>
+              </div>
+              <p class="noteText sampleDesc">A guide for moving the right proof earlier, where it changes commitment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-divider" id="pricing" aria-label="Pricing">
+      <div class="content">
+        <div class="pricing">
+          <div class="pricingInfo stack-24">
+  <div class="stack-16">
+    <p class="eyebrow eyebrow-accent">Pricing</p>
+    <h2>Fix the messaging layer before you pay for the wrong fix</h2>
+    <p class="bodyText">
+      This is a one-time purchase for teams that already have traffic, already have a funnel, and need a clear answer before another redesign, another spend increase, or another quarter of underperformance.
+    </p>
+  </div>
+
+  <div class="pricingAside">
+    <div class="surface-ghost surface-pad-md">
+      <ul class="checklist">
+        <li>Immediate access to the full toolkit</li>
+        <li>Diagnosis + rewrite + page-flow + tracking system</li>
+        <li>Reusable across homepage, pricing, and demo pages</li>
+        <li>Built for internal execution, not passive reading</li>
+      </ul>
+    </div>
+
+    <div class="pricingNote">
+      <p class="noteText">
+        If messaging is the real bottleneck, this pays for itself the moment it prevents one more wrong redesign or one more month of flat demo conversion.
+      </p>
+    </div>
+  </div>
+</div>
+
+          <div class="surface-major pricebox">
+  <div class="eyebrow eyebrow-accent priceLabel">One-Time Purchase</div>
+  <div class="price">$129</div>
+
+  <p class="why">
+    You are not paying for information. You are paying to identify the right bottleneck, fix it first, and stop wasting resources on the wrong layer.
+  </p>
+
+  <div class="decisionMeta">
+    <p class="noteText">
+      Most teams lose more than this through one bad optimisation cycle. This gives you a structured way to make the next decision correctly.
+    </p>
+
+    <a class="btn btn-primary" href="#">Get the Copy Leak Fix Toolkit</a>
+
+    <p class="microTrust">
+      Immediate download • One-time payment • No subscription • Use across launches, pages, and campaigns
+    </p>
+  </div>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band band-divider band-tight" id="faq" aria-label="FAQ">
+      <div class="content">
+        <div class="sectionBlock stack-18">
+          <p class="eyebrow eyebrow-soft">FAQ</p>
+
+          <div class="faq" id="faqList">
+  <div class="faqItem open">
+    <button class="faqQ" type="button" aria-expanded="true">
+      <span class="q">Why not just use ChatGPT for this?</span>
+      <span class="ico" aria-hidden="true"></span>
+    </button>
+    <div class="faqA">
+      <div class="faqInner">
+        ChatGPT can rewrite sentences. It does not reliably diagnose whether the real issue is hero clarity, proof timing, CTA friction, pricing clarity, or page sequence. This toolkit gives you the decision system first, then the rewrite patterns to apply.
+      </div>
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <button class="faqQ" type="button" aria-expanded="false">
+      <span class="q">Who gets the most value from this?</span>
+      <span class="ico" aria-hidden="true"></span>
+    </button>
+    <div class="faqA">
+      <div class="faqInner">
+        B2B SaaS teams already getting traffic, already running a funnel, and already suspecting that messaging is limiting demo conversion. This is strongest when there is something real to diagnose.
+      </div>
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <button class="faqQ" type="button" aria-expanded="false">
+      <span class="q">How fast can I use it?</span>
+      <span class="ico" aria-hidden="true"></span>
+    </button>
+    <div class="faqA">
+      <div class="faqInner">
+        Most teams can identify the primary copy leak in around 20 minutes, apply the first meaningful fix in 1–2 hours, and begin measuring movement within 7–14 days.
+      </div>
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <button class="faqQ" type="button" aria-expanded="false">
+      <span class="q">Is this done-for-you copy?</span>
+      <span class="ico" aria-hidden="true"></span>
+    </button>
+    <div class="faqA">
+      <div class="faqInner">
+        No. This is a guided execution system. It helps you or your PMM, founder, or growth lead make the right change with far less guessing.
+      </div>
+    </div>
+  </div>
+
+  <div class="faqItem">
+    <button class="faqQ" type="button" aria-expanded="false">
+      <span class="q">Why is it $129?</span>
+      <span class="ico" aria-hidden="true"></span>
+    </button>
+    <div class="faqA">
+      <div class="faqInner">
+        Because the cost is not the PDF. The cost is the decision error it helps prevent. One unnecessary redesign, one wasted campaign push, or one more month of flat demo conversion usually costs more than this.
+      </div>
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band closingBand" id="closing" aria-label="Closing CTA">
+  <div class="content">
+    <div class="surface-major closingPanel">
+      <div class="closingInner">
+        <p class="eyebrow eyebrow-accent">Final Decision</p>
+        <h2 class="closingHeading">
+          Fix the right layer first.
+        </h2>
+        <p class="bodyText closingText">
+          Most SaaS teams improve the wrong thing first. This toolkit helps you identify whether messaging is the real bottleneck, fix it directly, and measure the result before wasting another cycle on the wrong layer.
+        </p>
+        <div class="ctaRow" style="justify-content:center;">
+          <a class="btn btn-primary" href="#pricing">Get the Copy Leak Fix Toolkit — $129</a>
+        </div>
+        <p class="microTrust" style="margin-top:16px;">
+          One-time purchase • Immediate access • Built for teams with real traffic and real funnel decisions to make
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+
+  <footer>
+    <div class="footerInner content">
+      <div class="footerLinks">
+        <span>Support: <a href="mailto:support@example.com">support@example.com</a></span>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+      <div>This is a diagnostic framework, not a guarantee of results.</div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const faqItems = document.querySelectorAll('.faqItem');
+
+      faqItems.forEach((item) => {
+        const button = item.querySelector('.faqQ');
+
+        button.addEventListener('click', () => {
+          const isOpen = item.classList.contains('open');
+
+          faqItems.forEach((other) => {
+            other.classList.remove('open');
+            const otherButton = other.querySelector('.faqQ');
+            if (otherButton) otherButton.setAttribute('aria-expanded', 'false');
+          });
+
+          if (!isOpen) {
+            item.classList.add('open');
+            button.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
