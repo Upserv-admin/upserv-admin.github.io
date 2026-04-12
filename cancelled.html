@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Cancelled — UpServ</title>
+  <style>
+    :root {
+      --bg: #07090f;
+      --text: #f8fafc;
+      --muted: rgba(226,232,240,.62);
+      --accent: #ff5ca8;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: radial-gradient(700px 400px at 50% 0%, rgba(255,92,168,.04), transparent 60%),
+                  linear-gradient(180deg, #05070d, var(--bg));
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    /* nav */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(14px);
+      background: rgba(7,9,15,.68);
+      border-bottom: 1px solid rgba(148,163,184,.06);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .78rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(226,232,240,.7);
+    }
+    .brand-dot {
+      width: 9px; height: 9px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+ 
+    /* main card */
+    .card {
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+    }
+ 
+    /* x circle */
+    .icon-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+    .icon-ring {
+      width: 72px; height: 72px;
+      border-radius: 999px;
+      background: rgba(255,92,168,.08);
+      border: 1px solid rgba(255,92,168,.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn .5s cubic-bezier(.22,.61,.36,1) both;
+    }
+    @keyframes popIn {
+      from { transform: scale(.6); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+    .icon-ring svg {
+      width: 28px; height: 28px;
+      stroke: rgba(255,92,168,.9);
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 50;
+      stroke-dashoffset: 50;
+      animation: drawX .4s ease .35s forwards;
+    }
+    @keyframes drawX {
+      to { stroke-dashoffset: 0; }
+    }
+ 
+    /* text */
+    .tag {
+      display: inline-block;
+      font-size: .68rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,170,204,.72);
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      line-height: .96;
+      letter-spacing: -.056em;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    p {
+      font-size: 1rem;
+      line-height: 1.68;
+      color: rgba(226,232,240,.72);
+      max-width: 36ch;
+      margin: 0 auto;
+    }
+ 
+    /* divider */
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,92,168,.3), transparent);
+      margin: 28px auto;
+    }
+ 
+    /* detail row */
+    .details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      border: 1px solid rgba(148,163,184,.08);
+      border-radius: 18px;
+      padding: 20px 22px;
+      background: rgba(255,255,255,.012);
+      margin-bottom: 28px;
+    }
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .88rem;
+      color: rgba(226,232,240,.68);
+      line-height: 1.45;
+    }
+    .detail-row svg {
+      width: 15px; height: 15px;
+      stroke: rgba(255,92,168,.6);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      flex: 0 0 auto;
+    }
+ 
+    /* cta */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: linear-gradient(180deg, rgba(255,132,193,.9), rgba(255,92,168,.96));
+      color: #1a0610;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(255,92,168,.18);
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,.12);
+      background: transparent;
+      color: rgba(226,232,240,.62);
+      font-size: .88rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 24px;
+      transition: border-color .18s ease, color .18s ease;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(148,163,184,.26);
+      color: rgba(226,232,240,.88);
+    }
+ 
+    .btns {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+ 
+    /* support note */
+    .support {
+      font-size: .78rem;
+      color: rgba(148,163,184,.5);
+    }
+    .support a {
+      color: rgba(148,163,184,.7);
+      border-bottom: 1px solid rgba(148,163,184,.2);
+      transition: color .15s;
+    }
+    .support a:hover { color: rgba(226,232,240,.82); }
+ 
+    @media (max-width: 480px) {
+      h1 { font-size: 1.9rem; }
+    }
+  </style>
+</head>
+<body>
+ 
+  <nav class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      UPSERV
+    </div>
+  </nav>
+ 
+  <div class="card">
+ 
+    <div class="icon-wrap">
+      <div class="icon-ring">
+        <svg viewBox="0 0 28 28">
+          <path d="M7 7l14 14M21 7L7 21"/>
+        </svg>
+      </div>
+    </div>
+ 
+    <span class="tag">Payment cancelled</span>
+ 
+    <h1>No charge was<br>made.</h1>
+ 
+    <p>
+      Your order didn't go through. Nothing was taken from your account.
+    </p>
+ 
+    <div class="divider"></div>
+ 
+    <div class="details">
+      <div class="detail-row">
+        <svg viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="6"/><path d="M7.5 5v3l2 1.5"/></svg>
+        Your session is still active — you can try again right now
+      </div>
+      <div class="detail-row">
+        <svg viewBox="0 0 15 15"><rect x="1" y="3" width="13" height="9" rx="1.5"/><path d="M1 6l6.5 4L14 6"/></svg>
+        If your card was declined, try a different payment method
+      </div>
+      <div class="detail-row">
+        <svg viewBox="0 0 15 15"><path d="M2 4h11M2 7.5h7M2 11h9"/></svg>
+        The toolkit and your diagnosis results are still waiting
+      </div>
+    </div>
+ 
+    <div class="btns">
+      <a class="btn-primary" href="copy-toolkit.html">
+        Try again
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2.5 6.5h8M7 3l3.5 3.5L7 10"/></svg>
+      </a>
+      <a class="btn-ghost" href="index.html">
+        Go back to the funnel
+      </a>
+    </div>
+ 
+    <div class="support">
+      Having trouble? <a href="mailto:support@upserv.one">support@upserv.one</a>
+    </div>
+ 
+  </div>
+ 
+</body>
+</html>
